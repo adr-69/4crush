@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CalulatorV2</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #333;
+    overflow: hidden;
+  }
+
+  .calculator {
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 24px;
+    text-align: right;
+    background-color: #333;
+    color: #fff;
+  }
+
+  .button-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  button {
+    width: 22%;
+    height: 70px;
+    margin: 5px;
+    border: none;
+    border-radius: 35px;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.9;
+  }
+
+  /* Number buttons */
+  .number {
+    background-color: #505050;
+    color: #fff;
+  }
+
+  /* Operator buttons */
+  .operator {
+    background-color: #f9a825;
+    color: #fff;
+  }
+
+  /* Equals button */
+  .equal {
+    background-color: #ff9500;
+    color: white;
+  }
+
+  /* Clear and delete buttons */
+  .clear {
+    background-color: #a5a5a5;
+    color: #000;
+  }
+</style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" readonly>
+    <div class="button-row">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button class="operator" onclick="appendOperator('(')">(</button>
+      <button class="operator" onclick="appendOperator(')')">)</button>
+      <button class="operator" onclick="appendOperator('/')">÷</button>
+    </div>
+    <div class="button-row">
+      <button class="number" onclick="appendNumber('9')">9</button>
+      <button class="number" onclick="appendNumber('8')">8</button>
+      <button class="number" onclick="appendNumber('7')">7</button>
+      <button class="operator" onclick="appendOperator('*')">×</button>
+    </div>
+    <div class="button-row">
+      <button class="number" onclick="appendNumber('6')">6</button>
+      <button class="number" onclick="appendNumber('5')">5</button>
+      <button class="number" onclick="appendNumber('4')">4</button>
+      <button class="operator" onclick="appendOperator('-')">-</button>
+    </div>
+    <div class="button-row">
+      <button class="number" onclick="appendNumber('3')">3</button>
+      <button class="number" onclick="appendNumber('2')">2</button>
+      <button class="number" onclick="appendNumber('1')">1</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+    </div>
+    <div class="button-row">
+      <button class="number" style="width: 48%;" onclick="appendNumber('0')">0</button>
+      <button class="clear" onclick="deleteLast()">DEL</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('display');
+    let currentInput = '';
+
+    function appendNumber(num) {
+      currentInput += num;
+      display.value = currentInput;
+    }
+
+    function appendOperator(operator) {
+      currentInput += operator;
+      display.value = currentInput;
+    }
+
+    function calculate() {
+      if (currentInput === '') {
+        alert("LAGAY KA MUNA BABY 🥰");
+      } else {
+        try {
+          display.value = eval(currentInput);
+          currentInput = display.value;
+          setTimeout(() => alert("GALING NG BABY KO 😘"), 100);
+        } catch (error) {
+          display.value = 'Error';
+          setTimeout(() => alert("MALI KA BABY 🥺🥺"), 100);
+        }
+      }
+    }
+
+    function clearDisplay() {
+      currentInput = '';
+      display.value = '';
+    }
+
+    function deleteLast() {
+      currentInput = currentInput.slice(0, -1);
+      display.value = currentInput;
+    }
+  </script>
+</body>
+</html>

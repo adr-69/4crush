@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For EX Letter</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            background: linear-gradient(to bottom right, #ff9a9e, #fad0c4, #fbc2eb);
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 182, 193, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #message {
+            font-size: 2em;
+            margin: 20px 0;
+            padding: 10px;
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .choices {
+            margin-top: 20px;
+        }
+        .choice-button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            margin: 10px;
+            color: #ffffff;
+            background-color: #ff6f91;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .choice-button:hover {
+            background-color: #ff4a73;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="message">HELLO</div>
+        <div class="choices" style="display: none;">
+            <button class="choice-button" onclick="choose('yes')">OO</button>
+            <button class="choice-button" onclick="choose('no')">NEVER</button>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "HELLO",
+            "KILALA MO PABA KO??",
+            "BALIK KANA"
+        ];
+
+        const yesSequence = [
+            "TALAGA BA???",
+            "SABI MO YAN",
+            "HINTAYIN KITA DITO🥰🥰"
+        ];
+
+        const noSequence = [
+            "OK, STOP NKO",
+            "PAGOD NARIN KASI AKO",
+            "CGE NA",
+            "PAALAM 🥺😢"
+        ];
+
+        let messageIndex = 0;
+
+        function displayMessageSequence() {
+            if (messageIndex < messages.length) {
+                document.getElementById("message").innerText = messages[messageIndex];
+                messageIndex++;
+                setTimeout(displayMessageSequence, 4000); // 4-second delay
+            } else {
+                document.querySelector('.choices').style.display = 'block';
+            }
+        }
+
+        function choose(option) {
+            document.querySelector('.choices').style.display = 'none';
+            document.getElementById("message").innerText = '';
+            
+            const sequence = option === 'yes' ? yesSequence : noSequence;
+            let index = 0;
+
+            function displayChoiceSequence() {
+                if (index < sequence.length) {
+                    document.getElementById("message").innerText = sequence[index];
+                    index++;
+                    setTimeout(displayChoiceSequence, 4000); // 4-second delay
+                }
+            }
+            displayChoiceSequence();
+        }
+
+        displayMessageSequence();
+    </script>
+</body>
+</html>

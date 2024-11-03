@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUSH KBA?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffcccc;
+            background-image: url('https://images.unsplash.com/photo-1515804579540-43f1b0c135f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTYzODR8MHwxfGFsbHwxfHx8fHx8fHwxNjM1MTc2NzA2&ixlib=rb-1.2.1&q=80&w=400'); /* romantic hearts background */
+            background-size: cover;
+        }
+
+        #container {
+            background-color: rgba(255, 255, 255, 0.8);
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0 0 20px 0;
+        }
+
+        #buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #yesButton {
+            background-color: #ff69b4;
+            color: white;
+        }
+
+        #noButton {
+            background-color: #ff4040;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>CRUSH MOKO NOH?</h1>
+        <div id="buttons">
+            <button id="yesButton" onclick="sayYes()">YES</button>
+            <button id="noButton" onclick="moveNoButton()">NO</button>
+        </div>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function sayYes() {
+            document.getElementById("message").innerText = "WALA NG BAWIAN AH TAYO NA ❤";
+        }
+
+        function moveNoButton() {
+            const noButton = document.getElementById("noButton");
+            const container = document.getElementById("container");
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
+
+            const randomX = Math.floor(Math.random() * (containerWidth - noButton.offsetWidth));
+            const randomY = Math.floor(Math.random() * (containerHeight - noButton.offsetHeight));
+
+            noButton.style.position = "absolute";
+            noButton.style.left = randomX + "px";
+            noButton.style.top = randomY + "px";
+        }
+    </script>
+</body>
+</html>
