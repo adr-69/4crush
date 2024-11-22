@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(120deg, #f6d365, #fda085);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        #blackout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup {
+            background-color: #fff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            width: 90%;
+            max-width: 350px;
+        }
+
+        #loading {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #ffaa00;
+            display: none;
+        }
+
+        .gift-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .gift {
+            background-color: #ffeaa7;
+            padding: 20px;
+            border: 2px solid #f6b93b;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background-color 0.3s ease;
+        }
+
+        .gift:hover {
+            background-color: #f6b93b;
+            transform: translateY(-5px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            background-color: #ff6b6b;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ee5253;
+            transform: scale(1.1);
+        }
+
+        h1 {
+            margin: 30px 0;
+            font-size: 2.5em;
+            color: #2d3436;
+        }
+
+        #form-section {
+            margin-top: 50px;
+        }
+
+        #form-section input {
+            padding: 10px;
+            font-size: 18px;
+            border: 2px solid #fab1a0;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        #form-section input:focus {
+            outline: none;
+            border-color: #f0932b;
+        }
+
+        .error-message {
+            color: #d63031;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎁 Gift Game 🎁</h1>
+    <div id="form-section">
+        <form id="nameForm">
+            <label for="name" style="font-size: 18px;">Enter your name:</label><br>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            <button type="submit">Join</button>
+        </form>
+        <p id="error-message" class="error-message hidden">YOU HAVE ALREADY PICKED A GIFT.</p>
+    </div>
+
+    <div id="gift-section" class="hidden">
+        <h2 id="welcome-message"></h2>
+        <p style="font-size: 18px;">PICK A GIFT YOU WANT (IT'S RANDOM):</p>
+        <div class="gift-container" id="gifts"></div>
+    </div>
+
+    <div id="blackout">
+        <div class="popup">
+            <div id="loading">Processing...</div>
+            <h2 id="success-message"></h2>
+            <button id="closePopup" class="hidden">OK</button>
+        </div>
+    </div>
+
+    <script>
+        const webhookUrl = "https://discord.com/api/webhooks/1309480779033874473/-p-NaTFiklyp7p9DX_jjpGyUedIUIyQcEoikDGdoOIEY5fq8FbZurB8UjaEXa3PXq_wK"; // Replace with your Discord Webhook URL
+        const gifts = [
+            "DATE TAYONG DALAWA",
+            "CHAT TAYO",
+            "MEET UP",
+            "SABAY TAYO PUMASOK",
+            "HOLDING HANDS",
+            "CRUSHBACK",
+            "PAKILALA MOKO KAY TITA",
+            "CUTE MO",
+            "I LOVE U"
+        ];
+        const nameForm = document.getElementById("nameForm");
+        const nameInput = document.getElementById("name");
+        const errorMessage = document.getElementById("error-message");
+        const formSection = document.getElementById("form-section");
+        const giftSection = document.getElementById("gift-section");
+        const blackout = document.getElementById("blackout");
+        const giftsContainer = document.getElementById("gifts");
+        const welcomeMessage = document.getElementById("welcome-message");
+        const successMessage = document.getElementById("success-message");
+        const loading = document.getElementById("loading");
+        const closePopup = document.getElementById("closePopup");
+
+        const participants = new Set();
+
+        function displayGifts(name) {
+            formSection.classList.add("hidden");
+            giftSection.classList.remove("hidden");
+            welcomeMessage.textContent = `WELCOME: ${name}`;
+            giftsContainer.innerHTML = "";
+
+            gifts.forEach(gift => {
+                const giftElement = document.createElement("div");
+                giftElement.classList.add("gift");
+                giftElement.textContent = "🎁";
+                giftElement.addEventListener("click", () => sendToDiscord(name, gift));
+                giftsContainer.appendChild(giftElement);
+            });
+        }
+
+        async function sendToDiscord(name, giftText) {
+            const data = { content: `${name} WANT TO: ${giftText}` };
+            loading.style.display = "block";
+            successMessage.textContent = "";
+
+            try {
+                await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                setTimeout(() => {
+                    loading.style.display = "none";
+                    successMessage.textContent = `"${giftText}" SUCCESSFULLY SENT TO: ADRIAN MARTIN`;
+                    closePopup.classList.remove("hidden");
+                }, 2000);
+
+                giftSection.classList.add("hidden");
+                blackout.style.display = "flex";
+            } catch {
+                alert("Error! Failed to send the message to Discord.");
+            }
+        }
+
+        closePopup.addEventListener("click", () => blackout.style.display = "none");
+
+        nameForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const name = nameInput.value.trim();
+            if (!name) return;
+
+            if (participants.has(name)) {
+                errorMessage.classList.remove("hidden");
+            } else {
+                participants.add(name);
+                errorMessage.classList.add("hidden");
+                displayGifts(name);
+            }
+        });
+    </script>
+</body>
+</html>
