@@ -1,44 +1,130 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: lightpink;
+            color: #333;
+            background-image: url('https://img1.picmix.com/output/stamp/normal/0/6/7/2/2582760_338c7.gif');
+        }
 
-using namespace std;
+        #messageBox {
+            text-align: center;
+            padding: 30px;
+            border: 2px solid #ff6f91;
+            border-radius: 15px;
+            background: pink;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
 
-void displayMessage() {
-    cout << "Hey! You Like Me? (Y/N)" << endl;
-}
+        #messageBox p {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-void yesResponse() {
-    cout << "OMG I Like You TOO!" << endl;
-    // Simulate an image with text
-    cout << "[Image: GIF of excitement]" << endl;
-}
+        .button {
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
 
-void noResponse() {
-    // Simulate the "NO" button moving randomly in a window
-    cout << "The 'NO' button is moving randomly in a virtual space..." << endl;
-    srand(time(0)); // Seed for random movement
+        #yesButton {
+            background-color: #4CAF50;
+            color: white;
+            margin: 0 15px;
+        }
 
-    // Generate random positions for the button (console simulation)
-    int x = rand() % 50; // Random horizontal position
-    int y = rand() % 20; // Random vertical position
+        #yesButton:hover {
+            background-color: #43a047;
+            transform: scale(1.05);
+        }
 
-    cout << "The button is at position: (" << x << ", " << y << ")" << endl;
-}
+        #noButton {
+            background-color: #f44336;
+            color: white;
+            margin: 0 15px;
+            transition: transform 0.3s, background-color 0.2s;
+        }
 
-int main() {
-    char choice;
+        #noButton:hover {
+            background-color: #e53935;
+        }
 
-    displayMessage();
-    cin >> choice;
+        #chatMessage {
+            display: none;
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #ff6f91;
+            font-weight: bold;
+        }
 
-    if (choice == 'Y' || choice == 'y') {
-        yesResponse();
-    } else if (choice == 'N' || choice == 'n') {
-        noResponse();
-    } else {
-        cout << "Invalid input. Please enter 'Y' or 'N'." << endl;
-    }
+       
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    return 0;
-}
+        img {
+            height: 150px;
+            width: 150px;
+            border-radius: 10%
+        }
+    </style>
+</head>
+<body>
+    <div id="messageBox">
+        <img src="https://i.pinimg.com/originals/71/6d/a6/716da611982b116f8999e0f5e128550b.gif" alt="">
+        <p>Hey! You Like Me?</p>
+        <div class="button-container">
+            <button id="yesButton" class="button">YES</button>
+            <button id="noButton" class="button">NO</button>
+        </div>
+        <div id="chatMessage"></div> 
+    </div>
+
+    <script>
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const chatMessage = document.getElementById('chatMessage');
+        const messageBox = document.getElementById('messageBox');
+
+        yesButton.addEventListener('click', () => {
+         
+            messageBox.innerHTML = '';
+           
+            chatMessage.innerHTML = `
+                <img src="https://media.tenor.com/bM2ahcMULzQAAAAM/us.gif" alt="Image" />
+                <p>OMG I Like You TOO!</p>
+            `;
+            messageBox.appendChild(chatMessage);
+            chatMessage.style.display = 'block';
+        });
+
+        noButton.addEventListener('click', () => {
+            const randomX = Math.random() * (window.innerWidth - noButton.offsetWidth);
+            const randomY = Math.random() * (window.innerHeight - noButton.offsetHeight);
+
+            noButton.style.position = 'absolute';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        });
+    </script>
+</body>
+</html>
